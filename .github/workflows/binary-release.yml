@@ -23,13 +23,13 @@ jobs:
     uses: ./.github/workflows/binary-build.yml
     with:
       build_matrix: |
-         {
+        {
           "builds": [
-            {"distro": "debian", "version": "forky"}
+            {"distro": "debian", "version": "trixie"}
           ],
           "arch": ["amd64"],
           "include": [
-            {"arch": "amd64", "runner": "ubuntu-26.04"},
+            {"arch": "amd64", "runner": "ubuntu-26.04"}
           ]
         }
       version_type: "release"
