@@ -43,6 +43,17 @@ if [ "$1" == "tip" ]; then
   GHOSTTY_VERSION=$(cat VERSION)
 fi
 
+# 找到应用补丁的循环，修改为：
+for patch in debian/patches/*.patch; do
+  [ -f "$patch" ] || continue
+  echo "Checking $patch"
+  if ! patch -p1 --dry-run < "$patch"; then
+    echo "ERROR: $patch does not apply cleanly" >&2
+    exit 1
+  fi
+  patch -p1 < "$patch"
+done
+
 echo "Fetch Zig Cache"
 ZIG_GLOBAL_CACHE_DIR=vendor-zig-cache ./nix/build-support/fetch-zig-cache.sh
 
