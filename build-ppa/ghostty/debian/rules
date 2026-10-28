@@ -12,12 +12,12 @@ override_dh_auto_install:
 		--summary all \
 		--prefix /usr \
 		--system vendor-zig-cache/p \
-#		#--global-cache-dir zig-cache \
 		-Doptimize=ReleaseFast \
 		-Dcpu=baseline \
 		-Dpie=true \
 		-Demit-docs \
 		-Dversion-string=$(GHOSTTY_VERSION)
+#		#--global-cache-dir zig-cache \
 
 	# TODO: Consider passing -Dstrip=false to zig build and producing a
 	# ghostty-dbgsym package (see ghostty-debian PR #11).
