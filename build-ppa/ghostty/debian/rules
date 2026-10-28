@@ -2,7 +2,7 @@
 
 export DEB_BUILD_MAINT_OPTIONS = hardening=+all
 GHOSTTY_VERSION ?= $(shell cat VERSION | sed 's/main+/ubuntu-nightly-/g')
-ZIG ?= zig0.15
+ZIG ?= zig0.17
 
 %:
 	dh $@
@@ -12,7 +12,7 @@ override_dh_auto_install:
 		--summary all \
 		--prefix /usr \
 		--system vendor-zig-cache/p \
-		--global-cache-dir zig-cache \
+#		#--global-cache-dir zig-cache \
 		-Doptimize=ReleaseFast \
 		-Dcpu=baseline \
 		-Dpie=true \
