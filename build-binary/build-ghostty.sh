@@ -39,10 +39,6 @@ tar -xzmf "$SOURCE_FILENAME.tar.gz"
 
 cd ghostty-*/
 
-if [ "$1" == "tip" ]; then
-  GHOSTTY_VERSION=$(cat VERSION)
-fi
-
 # 找到应用补丁的循环，修改为：
 for patch in debian/patches/*.patch; do
   [ -f "$patch" ] || continue
@@ -54,8 +50,30 @@ for patch in debian/patches/*.patch; do
   patch -p1 < "$patch"
 done
 
+if [ "$1" == "tip" ]; then
+  GHOSTTY_VERSION=$(cat VERSION)
+fi
+
 echo "Fetch Zig Cache"
-ZIG_GLOBAL_CACHE_DIR=vendor-zig-cache ./nix/build-support/fetch-zig-cache.sh
+fetch_zig_cache() {
+  ZIG_GLOBAL_CACHE_DIR=vendor-zig-cache ./nix/build-support/fetch-zig-cache.sh
+}
+
+retries=5
+i=1
+while [ "$i" -le "$retries" ]; do
+  if fetch_zig_cache; then
+    echo "✓ Zig cache fetched (attempt $i)"
+    break
+  fi
+  if [ "$i" -eq "$retries" ]; then
+    echo "✗ Failed to fetch Zig cache after $retries attempts" >&2
+    exit 1
+  fi
+  echo "Attempt $i failed, retrying in $((i * 5))s..."
+  sleep $((i * 5))
+  i=$((i + 1))
+done
 
 echo "Copy debian/ packaging"
 cp -r "$REPO_DIR/build-ppa/ghostty/debian" ./debian
