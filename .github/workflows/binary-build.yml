@@ -62,28 +62,9 @@ jobs:
       - name: Test Installation
         run: docker run --rm -v$PWD:/workspace -w /workspace ghostty:${{ matrix.builds.distro }}-${{ matrix.builds.version }}-${{ matrix.arch }}-${{ inputs.zig_version }} dpkg -i ghostty_*.deb
 
-      - name: Rename .deb with distro info
-        if: always()
-        run: |
-          set -euo pipefail
-          shopt -s nullglob
-          distro="${{ matrix.builds.distro }}"
-          ver="${{ matrix.builds.version }}"
-          arch="${{ matrix.arch }}"
-          for f in ghostty_*.deb; do
-            # ghostty_1.4.0-0~ppa2_amd64.deb -> ghostty_1.4.0-0~ppa2_debian_forky_amd64.deb
-            new="${f%_${arch}.deb}_${distro}_${ver}_${arch}.deb"
-            echo "renaming: $f -> $new"
-            mv -- "$f" "$new"
-          done
-          ls -la *.deb
-      
-      - name: Upload .deb artifact
-        if: always()
+      - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ghostty-${{ matrix.builds.distro }}-${{ matrix.builds.version }}-${{ matrix.arch }}
+          name: package-${{ matrix.builds.distro }}-${{ matrix.builds.version }}-${{ matrix.arch }}-${{ inputs.zig_version }}
+          retention-days: 7
           path: ghostty_*.deb
-          if-no-files-found: warn
-
-
