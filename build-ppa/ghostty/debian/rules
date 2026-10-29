@@ -11,7 +11,7 @@ override_dh_auto_install:
 	DESTDIR=$(CURDIR)/debian/ghostty $(ZIG) build \
 		--summary all \
 		--prefix /usr \
-		-Doptimize=ReleaseFast \
+		-Doptimize=ReleaseFast -fno-sys=gtk4-layer-shell \
 		-Dcpu=baseline \
 		-Dpie=true \
 		-Demit-docs \
