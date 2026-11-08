@@ -17,7 +17,9 @@ override_dh_auto_install:
 		-Dcpu=baseline \
 		-Dpie=true \
 		-Demit-docs \
-		-Dversion-string=$(GHOSTTY_VERSION)
+		-Dversion-string=$(GHOSTTY_VERSION) \
+		-fsys=fontconfig \
+		-fno-sys=gtk4-layer-shell
 
 	# TODO: Consider passing -Dstrip=false to zig build and producing a
 	# ghostty-dbgsym package (see ghostty-debian PR #11).
