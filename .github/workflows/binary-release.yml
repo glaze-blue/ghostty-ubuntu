@@ -25,15 +25,12 @@ jobs:
       build_matrix: |
         {
           "builds": [
-            {"distro": "ubuntu", "version": "26.10"},
-            {"distro": "ubuntu", "version": "26.04"},
             {"distro": "debian", "version": "trixie"},
             {"distro": "debian", "version": "forky"}
           ],
-          "arch": ["amd64", "arm64"],
+          "arch": ["amd64"],
           "include": [
-            {"arch": "amd64", "runner": "ubuntu-26.04"},
-            {"arch": "arm64", "runner": "ubuntu-26.04-arm"}
+            {"arch": "amd64", "runner": "ubuntu-26.04"}
           ]
         }
       version_type: "release"
@@ -70,4 +67,5 @@ jobs:
           files: ghostty_*.deb
           name: ${{ inputs.release_version }}
           tag_name: ${{ env.RELEASE_TAG }}
+          target_commitish: ghostty-debian
           fail_on_unmatched_files: true
